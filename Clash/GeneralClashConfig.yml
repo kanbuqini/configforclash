@@ -2,8 +2,6 @@
 # 配置文件需要放置在 $HOME/.config/clash/config.yml
 # 或者运行目录下的config.yml
 #---------------------------------------------------#
-# 混合端口 HTTP和SOCKS5用一个端口
-mixed-port: 7890
 
 # HTTP 代理端口
 # port: 7890
@@ -13,6 +11,9 @@ socks-port: 7891
 
 # Linux 和 macOS 的 redir 代理端口 (如需使用此功能，请取消注释)
 # redir-port: 7892
+
+# 混合端口 HTTP和SOCKS5用一个端口
+mixed-port: 7893
 
 # 允许局域网的连接（可用来共享代理）
 allow-lan: true
@@ -25,14 +26,14 @@ bind-address: "*"
 ipv6: true
 
 # 规则模式：rule（规则） / global（全局代理）/ direct（全局直连）/ script (脚本)
-# mode: rule
+mode: rule
 
 # 设置日志输出级别 (默认级别：silent，即不输出任何内容，以避免因日志内容过大而导致程序内存溢出）。
 # 5 个级别：silent / error / warning / info / debug。级别越高日志输出量越大，越倾向于调试，若需要请自行开启。
-log-level: info
+log-level: silent
 
 # Clash 的 RESTful API
-external-controller: '127.0.0.1:9090'
+external-controller: :9090
 
 # 您可以将静态网页资源（如 clash-dashboard）放置在一个目录中，clash 将会服务于 `RESTful API/ui`
 # 参数应填写配置目录的相对路径或绝对路径。
@@ -43,7 +44,7 @@ external-controller: '127.0.0.1:9090'
 # external-ui: dashboard
 
 # RESTful API 的口令 (可选)
-# secret: ""
+secret: "admin"
 
 # 实验性功能
 experimental:
@@ -62,37 +63,37 @@ experimental:
 #   '*.clash.dev': 127.0.0.1
 #   'alpha.clash.dev': '::1'
 
-#dns:
-  #enable: true # 是否启用dns false
-  #ipv6: false
-  #listen: 0.0.0.0:53
-  #enhanced-mode: redir-host # 模式：redir-host或fake-ip
-  #fake-ip-range: 198.18.0.1/16 #
-  #fake-ip-filter: # fake ip 白名单列表，如果你不知道这个参数的作用，请勿修改
-     #- '*.lan'
-     #- localhost.ptlogin2.qq.com
-  #nameserver:
-     #- 223.5.5.5 # 阿里DNS
-     #- 180.76.76.76 # 百度DNS
-     #- 119.29.29.29 # 腾讯DNS
-     #- 117.50.11.11 # ONE DNS拦截版 恶意网站拦截、广告过滤
+dns:
+  enable: true # 是否启用dns false
+  ipv6: false
+  listen: 0.0.0.0:53
+  enhanced-mode: fake-ip # 模式：redir-host或fake-ip
+  fake-ip-range: 198.18.0.1/16 #
+  fake-ip-filter: # fake ip 白名单列表，如果你不知道这个参数的作用，请勿修改
+    - '*.lan'
+    - localhost.ptlogin2.qq.com
+  nameserver:
+    - 223.5.5.5 # 阿里DNS
+    - 180.76.76.76 # 百度DNS
+    - 119.29.29.29 # 腾讯DNS
+    - 117.50.11.11 # ONE DNS拦截版 恶意网站拦截、广告过滤
      #- 117.50.10.10 # ONE DNS纯净版 直接返回其真实的响应结果
-     #- 114.114.114.114 # 114DNS
-     #- https://dns.alidns.com/dns-query # 阿里 DoH DNS
-     #- https://doh.360.cn/dns-query # 360 DoH DNS
-  #fallback:
-     #- 8.8.8.8 # 谷歌DNS
-     #- 1.1.1.1 # Cloudflare DNS
-     #- tls://dns.rubyfish.cn:853
-     #- tls://1.0.0.1:853
-     #- tls://dns.google:853
-     #- https://dns.rubyfish.cn/dns-query
-     #- https://cloudflare-dns.com/dns-query
-     #- https://dns.google/dns-query
-  #fallback-filter:
-     #geoip: true # 默认
-     #ipcidr: # 在这个网段内的 IP 地址会被考虑为被污染的 IP
-       #- 240.0.0.0/4
+    - 114.114.114.114 # 114DNS
+    - https://dns.alidns.com/dns-query # 阿里 DoH DNS
+    - https://doh.360.cn/dns-query # 360 DoH DNS
+  fallback:
+    - 8.8.8.8 # 谷歌DNS
+    - 1.1.1.1 # Cloudflare DNS
+    - tls://dns.rubyfish.cn:853
+    - tls://1.0.0.1:853
+    - tls://dns.google:853
+    - https://dns.rubyfish.cn/dns-query
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  fallback-filter:
+    geoip: true # 默认
+    ipcidr: # 在这个网段内的 IP 地址会被考虑为被污染的 IP
+      - 240.0.0.0/4
 
 # 1. clash DNS 请求逻辑：
 #   (1) 当访问一个域名时， nameserver 与 fallback 列表内的所有服务器并发请求，得到域名对应的 IP 地址。
@@ -130,8 +131,8 @@ experimental:
 
 # Clash for Windows
 # Proxies module latency test settings
-cfw-latency-timeout: 3000
-cfw-latency-url: http://www.gstatic.com/generate_204
+#cfw-latency-timeout: 3000
+#cfw-latency-url: http://www.gstatic.com/generate_204
 
 # 混合配置（mixin）
 # 支持向所有配置文件中注入公共属性设置
@@ -158,10 +159,10 @@ cfw-latency-url: http://www.gstatic.com/generate_204
 # Options for proxy: none, chain(proxy group in connection chains), all
 # Options for profile: true, false
 # Options for mode: true, false
-cfw-conn-break-strategy:
-  proxy: none # none/chain/all
-  profile: true # true/false
-  mode: false # true/false
+#cfw-conn-break-strategy:
+#  proxy: none # none/chain/all
+#  profile: true # true/false
+#  mode: false # true/false
 
 # 自定义状态栏图标
 #cfw-tray-icon:
@@ -182,7 +183,7 @@ cfw-conn-break-strategy:
 #  latency：按节点延迟升序排列
 #  alphabet：按节点名称字母表排列
 # Sort proxies in Proxies module by default/latency/alphabet
-cfw-proxies-order: default
+#cfw-proxies-order: latency
 
 # 子进程 启动其他应用
 # Run child process after CFW started
@@ -214,694 +215,567 @@ cfw-proxies-order: default
 # System proxy will ignore these domains(or ipnet)
 # 系统代理跳过列表-备份的，不起作用，
 # 使用时可以将cfw-bypass-bak与cfw-bypass内容互换
-cfw-bypass-bak:
-  # 原有字段不用删除
-  - qq.com
-  - 'music.163.com' # 网易云域名1
-  - '*.music.126.net' # 网易云域名2
-  - localhost
-  - 127.*
-  - 10.*
-  - 172.16.*
-  - 172.17.*
-  - 172.18.*
-  - 172.19.*
-  - 172.20.*
-  - 172.21.*
-  - 172.22.*
-  - 172.23.*
-  - 172.24.*
-  - 172.25.*
-  - 172.26.*
-  - 172.27.*
-  - 172.28.*
-  - 172.29.*
-  - 172.30.*
-  - 172.31.*
-  - 192.168.*
-  - <local>
-# 系统代理跳过列表 起作用的
-cfw-bypass:
-  # 直连列表
-  # MyList
-  - "*.13th.tech"
-  - "*.423down.com"
-  - "*.bokecc.com"
-  - "*.chaipip.com"
-  - "*.chinaplay.store"
-  - "*.hrtsea.com"
-  - "*.kaikeba.com"
-  - "*.laomo.me"
-  - "*.mpyit.com"
-  - "*.msftconnecttest.com"
-  - "*.msftncsi.com"
-  - "*.qupu123.com"
-  - "*.pdfwifi.com"
-  - "*.zhenguanyu.biz"
-  - "*.zhenguanyu.com"
-  - "*.snapdrop.net"
-  - "*.tebex.io"
-  # CN域名直连(中国|公司|网络)
-  - "*.cn"
-  - "*.xn--fiqs8s"
-  - "*.xn--55qx5d"
-  - "*.xn--io0a7i"
-  # 中国国内常见域名关键词直连
-  - "*360buy*"
-  - "*alicdn*"
-  - "*alimama*"
-  - "*alipay*"
-  - "*appzapp*"
-  - "*baidupcs*"
-  - "*bilibili*"
-  - "*ccgslb*"
-  - "*chinacache*"
-  - "*duobao*"
-  - "*jdpay*"
-  - "*moke*"
-  - "*qhimg*"
-  - "*vpimg*"
-  - "*xiami*"
-  - "*xiaomi*"
-  # 360
-  - "*.360.com"
-  - "*.360kuai.com"
-  - "*.360safe.com"
-  - "*.dhrest.com"
-  - "*.qhres.com"
-  - "*.qhstatic.com"
-  - "*.qhupdate.com"
-  - "*.so.com"
-  # 4399
-  - "*.4399.com"
-  - "*.4399pk.com"
-  - "*.5054399.com"
-  - "*.img4399.com"
-  # 58
-  - "*.58.com"
-  # Alibaba
-  - "*.1688.com"
-  - "*.aliapp.org"
-  - "*.alibaba.com"
-  - "*.alibabacloud.com"
-  - "*.alibabausercontent.com"
-  - "*.alicdn.com"
-  - "*.alicloudccp.com"
-  - "*.aliexpress.com"
-  - "*.aliimg.com"
-  - "*.alikunlun.com"
-  - "*.alipay.com"
-  - "*.alipayobjects.com"
-  - "*.alisoft.com"
-  - "*.aliyun.com"
-  - "*.aliyuncdn.com"
-  - "*.aliyuncs.com"
-  - "*.aliyundrive.com"
-  - "*.aliyundrive.net"
-  - "*.amap.com"
-  - "*.autonavi.com"
-  - "*.dingtalk.com"
-  - "*.ele.me"
-  - "*.hichina.com"
-  - "*.mmstat.com"
-  - "*.mxhichina.com"
-  - "*.soku.com"
-  - "*.taobao.com"
-  - "*.taobaocdn.com"
-  - "*.tbcache.com"
-  - "*.tbcdn.com"
-  - "*.tmall.com"
-  - "*.tmall.hk"
-  - "*.ucweb.com"
-  - "*.xiami.com"
-  - "*.xiami.net"
-  - "*.ykimg.com"
-  - "*.youku.com"
-  # Baidu
-  - "*.baidu.com"
-  - "*.baidubcr.com"
-  - "*.baidupcs.com"
-  - "*.baidustatic.com"
-  - "*.bcebos.com"
-  - "*.bdimg.com"
-  - "*.bdstatic.com"
-  - "*.bdurl.net"
-  - "*.hao123.com"
-  - "*.hao123img.com"
-  - "*.jomodns.com"
-  - "*.yunjiasu-cdn.net"
-  # Bilibili
-  - "*.acg.tv"
-  - "*.acgvideo.com"
-  - "*.b23.tv"
-  - "*.bigfun.cn"
-  - "*.bigfunapp.cn"
-  - "*.biliapi.com"
-  - "*.biliapi.net"
-  - "*.bilibili.com"
-  - "*.bilibili.co"
-  - "*.biliintl.co"
-  - "*.biligame.com"
-  - "*.biligame.net"
-  - "*.bilivideo.com"
-  - "*.bilivideo.cn"
-  - "*.hdslb.com"
-  - "*.im9.com"
-  - "*.smtcdns.net"
-  # ByteDance
-  - "*.amemv.com"
-  - "*.bdxiguaimg.com"
-  - "*.bdxiguastatic.com"
-  - "*.byted-static.com"
-  - "*.bytedance.com"
-  - "*.bytedance.net"
-  - "*.bytedns.net"
-  - "*.bytednsdoc.com"
-  - "*.bytegoofy.com"
-  - "*.byteimg.com"
-  - "*.bytescm.com"
-  - "*.bytetos.com"
-  - "*.bytexservice.com"
-  - "*.douyin.com"
-  - "*.douyincdn.com"
-  - "*.douyinpic.com"
-  - "*.douyinstatic.com"
-  - "*.douyinvod.com"
-  - "*.feelgood.cn"
-  - "*.feiliao.com"
-  - "*.gifshow.com"
-  - "*.huoshan.com"
-  - "*.huoshanzhibo.com"
-  - "*.ibytedapm.com"
-  - "*.iesdouyin.com"
-  - "*.ixigua.com"
-  - "*.kspkg.com"
-  - "*.pstatp.com"
-  - "*.snssdk.com"
-  - "*.toutiao.com"
-  - "*.toutiao13.com"
-  - "*.toutiaoapi.com"
-  - "*.toutiaocdn.com"
-  - "*.toutiaocdn.net"
-  - "*.toutiaocloud.com"
-  - "*.toutiaohao.com"
-  - "*.toutiaohao.net"
-  - "*.toutiaoimg.com"
-  - "*.toutiaopage.com"
-  - "*.wukong.com"
-  - "*.zijieapi.com"
-  - "*.zijieimg.com"
-  - "*.zjbyte.com"
-  - "*.zjcdn.com"
-  # CCTV
-  - "*.cctv.com"
-  - "*.cctvpic.com"
-  - "*.livechina.com"
-  # ChinaNet
-  - "*.21cn.com"
-  # DiDi
-  - "*.didialift.com"
-  - "*.didiglobal.com"
-  - "*.udache.com"
-  # Douyu 斗鱼
-  - "*.douyu.com"
-  - "*.douyu.tv"
-  - "*.douyuscdn.com"
-  - "*.douyutv.com"
-  # Epic
-  - "*.epicgames.com"
-  - "*.epicgames.dev"
-  - "*.helpshift.com"
-  - "*.paragon.com"
-  - "*.unrealengine.com"
-  # HuaWei
-  - "*.dbankcdn.com"
-  - "*.hc-cdn.com"
-  - "*.hicloud.com"
-  - "*.hihonor.com"
-  - "*.huawei.com"
-  - "*.huaweicloud.com"
-  - "*.huaweishop.net"
-  - "*.hwccpc.com"
-  - "*.vmall.com"
-  - "*.vmallres.com"
-  # Heytap
-  - "*.allawnfs.com"
-  - "*.allawno.com"
-  - "*.allawntech.com"
-  - "*.coloros.com"
-  - "*.heytap.com"
-  - "*.heytapcs.com"
-  - "*.heytapdownload.com"
-  - "*.heytapimage.com"
-  - "*.heytapmobi.com"
-  - "*.oppo.com"
-  - "*.oppoer.me"
-  - "*.oppomobile.com"
-  # Iflytek 科大讯飞
-  - "*.iflyink.com"
-  - "*.iflyrec.com"
-  - "*.iflytek.com"
-  # Iqiyi
-  - "*.71.am"
-  - "*.71edge.com"
-  - "*.iqiyi.com"
-  - "*.iqiyipic.com"
-  - "*.ppsimg.com"
-  - "*.qiyi.com"
-  - "*.qiyipic.com"
-  - "*.qy.net"
-  # JD
-  - "*.360buy.com"
-  - "*.360buyimg.com"
-  - "*.jcloudcs.com"
-  - "*.jd.com"
-  - "*.jd.hk"
-  - "*.jdcloud.com"
-  - "*.jdpay.com"
-  - "*.paipai.com"
-  # Kingsoft
-  - "*.iciba.com"
-  - "*.ksosoft.com"
-  - "*.ksyun.com"
-  # Kuaishou 快手
-  - "*.kuaishou.com"
-  - "*.yximgs.com"
-  # Meitu
-  - "*.meitu.com"
-  - "*.meitudata.com"
-  - "*.meitustat.com"
-  - "*.meipai.com"
-  # LeTV 乐视
-  - "*.le.com"
-  - "*.lecloud.com"
-  - "*.letv.com"
-  - "*.letvcloud.com"
-  - "*.letvimg.com"
-  - "*.letvlive.com"
-  - "*.letvstore.com"
-  # MGTV 芒果TV
-  - "*.hitv.com"
-  - "*.hunantv.com"
-  - "*.mgtv.com"
-  # MI
-  - "*.duokan.com"
-  - "*.mi-img.com"
-  - "*.mi.com"
-  - "*.miui.com"
-  - "*.xiaomi.com"
-  - "*.xiaomi.net"
-  - "*.xiaomicp.com"
-  # NetEase
-  - "*.126.com"
-  - "*.126.net"
-  - "*.127.net"
-  - "*.163.com"
-  - "*.163yun.com"
-  - "*.lofter.com"
-  - "*.netease.com"
-  - "*.ydstatic.com"
-  - "*.youdao.com"
-  # PPTV、PPLive
-  - "*.pplive.com"
-  - "*.pptv.com"
-  # PDD 拼多多
-  - "*.pinduoduo.com"
-  - "*.yangkeduo.com"
-  # Sina
-  - "*.leju.com"
-  - "*.miaopai.com"
-  - "*.sina.com"
-  - "*.sina.com.cn"
-  - "*.sina.cn"
-  - "*.sinaapp.com"
-  - "*.sinaapp.cn"
-  - "*.sinaimg.com"
-  - "*.sinaimg.cn"
-  - "*.weibo.com"
-  - "*.weibo.cn"
-  - "*.weibocdn.com"
-  - "*.weibocdn.cn"
-  - "*.xiaoka.tv"
-  # Sohu Sogo
-  - "*.go2map.com"
-  - "*.sogo.com"
-  - "*.sogou.com"
-  - "*.sogoucdn.com"
-  - "*.sohu-inc.com"
-  - "*.sohu.com"
-  - "*.sohucs.com"
-  - "*.sohuno.com"
-  - "*.sohurdc.com"
-  - "*.v-56.com"
-  # Sony
-  - "*.playstation.com"
-  - "*.playstation.net"
-  - "*.playstationnetwork.com"
-  - "*.sony.com"
-  - "*.sonyentertainmentnetwork.com"
-  # SteamCN
-  - "*.cm.steampowered.com"
-  - "*.steamcontent.com"
-  - "*.steamusercontent.com"
-  - "*.steamchina.com"
-  - "csgo.wmsj.cn"
-  - "dota2.wmsj.cn"
-  - "wmsjsteam.com"
-  - "dl.steam.clngaa.com"
-  - "dl.steam.ksyna.com"
-  - "st.dl.bscstorage.net"
-  - "st.dl.eccdnx.com"
-  - "st.dl.pinyuncloud.com"
-  - "xz.pphimalayanrt.com"
-  - "steampipe.steamcontent.tnkjmec.com"
-  - "steampowered.com.8686c.com"
-  - "steamstatic.com.8686c.com"
-  # Tencent
-  - "*.foxmail.com"
-  - "*.gtimg.com"
-  - "*.idqqimg.com"
-  - "*.igamecj.com"
-  - "*.myapp.com"
-  - "*.myqcloud.com"
-  - "*.qq.com"
-  - "*.qqmail.com"
-  - "*.qqurl.com"
-  - "*.smtcdns.com"
-  - "*.smtcdns.net"
-  - "*.soso.com"
-  - "*.tencent-cloud.net"
-  - "*.tencent.com"
-  - "*.tencentmind.com"
-  - "*.tenpay.com"
-  - "*.wechat.com"
-  - "*.weixin.com"
-  - "*.weiyun.com"
-  # Vip 唯品会
-  - "*.appsimg.com"
-  - "*.appvipshop.com"
-  - "*.vip.com"
-  - "*.vipstatic.com"
-  # Ximalaya 喜马拉雅
-  - "*.ximalaya.com"
-  - "*.xmcdn.com"
-  # Xunlei 迅雷
-  - "*.00cdn.com"
-  - "*.88cdn.com"
-  - "*.kanimg.com"
-  - "*.kankan.com"
-  - "*.p2cdn.com"
-  - "*.sandai.net"
-  - "*.thundercdn.com"
-  - "*.xunlei.com"
-  # YYeTs 人人影视
-  - "*.got001.com"
-  - "*.p4pfile.com"
-  - "*.rrys.tv"
-  - "*.rrys2020.com"
-  - "*.yyets.com"
-  - "*.zimuzu.io"
-  - "*.zimuzu.tv"
-  - "*.zmz001.com"
-  - "*.zmz002.com"
-  - "*.zmz003.com"
-  - "*.zmz004.com"
-  - "*.zmz2019.com"
-  - "*.zmzapi.com"
-  - "*.zmzapi.net"
-  - "*.zmzfile.com"
-  # TeamViewer
-  - "*.teamviewer.com"
-  # Public Direct CDN 公共直连
-  - "*.baomitu.com"
-  - "*.bootcss.com"
-  - "*.jiasule.com"
-  - "*.staticfile.org"
-  - "*.upaiyun.com"
-  # China DNS
-  - "*.doh.pub"
-  - "*.dns.alidns.com"
-  - "*.doh.360.cn"
-  # AccelerateDirectSites
-  - "*.10010.com"
-  - "*.115.com"
-  - "*.12306.com"
-  - "*.17173.com"
-  - "*.178.com"
-  - "*.17k.com"
-  - "*.360doc.com"
-  - "*.36kr.com"
-  - "*.3dmgame.com"
-  - "*.51cto.com"
-  - "*.51job.com"
-  - "*.51jobcdn.com"
-  - "*.56.com"
-  - "*.8686c.com"
-  - "*.abchina.com"
-  - "*.abercrombie.com"
-  - "*.acfun.tv"
-  - "*.air-matters.com"
-  - "*.air-matters.io"
-  - "*.aixifan.com"
-  - "*.algocasts.io"
-  - "*.babytree.com"
-  - "*.babytreeimg.com"
-  - "*.baicizhan.com"
-  - "*.baidupan.com"
-  - "*.baike.com"
-  - "*.biqudu.com"
-  - "*.biquge.com"
-  - "*.bitauto.com"
-  - "*.bosszhipin.com"
-  - "*.c-ctrip.com"
-  - "*.camera360.com"
-  - "*.cdnmama.com"
-  - "*.chaoxing.com"
-  - "*.che168.com"
-  - "*.chinacache.net"
-  - "*.chinaso.com"
-  - "*.chinaz.com"
-  - "*.chinaz.net"
-  - "*.chuimg.com"
-  - "*.cibntv.net"
-  - "*.clouddn.com"
-  - "*.cloudxns.net"
-  - "*.cn163.net"
-  - "*.cnblogs.com"
-  - "*.cnki.net"
-  - "*.cnmstl.net"
-  - "*.coolapk.com"
-  - "*.coolapkmarket.com"
-  - "*.csdn.net"
-  - "*.ctrip.com"
-  - "*.dangdang.com"
-  - "*.dfcfw.com"
-  - "*.dianping.com"
-  - "*.dilidili.wang"
-  - "*.douban.com"
-  - "*.doubanio.com"
-  - "*.dpfile.com"
-  - "*.duowan.com"
-  - "*.dxycdn.com"
-  - "*.dytt8.net"
-  - "*.easou.com"
-  - "*.eastday.com"
-  - "*.eastmoney.com"
-  - "*.ecitic.com"
-  - "*.element-plus.org"
-  - "*.ewqcxz.com"
-  - "*.fang.com"
-  - "*.fantasy.tv"
-  - "*.feng.com"
-  - "*.fengkongcloud.com"
-  - "*.fir.im"
-  - "*.frdic.com"
-  - "*.fresh-ideas.cc"
-  - "*.ganji.com"
-  - "*.ganjistatic1.com"
-  - "*.geetest.com"
-  - "*.geilicdn.com"
-  - "*.ghpym.com"
-  - "*.godic.net"
-  - "*.guazi.com"
-  - "*.gwdang.com"
-  - "*.gzlzfm.com"
-  - "*.haibian.com"
-  - "*.haosou.com"
-  - "*.hollisterco.com"
-  - "*.hongxiu.com"
-  - "*.huajiao.com"
-  - "*.hupu.com"
-  - "*.huxiucdn.com"
-  - "*.huya.com"
-  - "*.ifeng.com"
-  - "*.ifengimg.com"
-  - "*.images-amazon.com"
-  - "*.infzm.com"
-  - "*.ipip.net"
-  - "*.it168.com"
-  - "*.ithome.com"
-  - "*.ixdzs.com"
-  - "*.jianguoyun.com"
-  - "*.jianshu.com"
-  - "*.jianshu.io"
-  - "*.jianshuapi.com"
-  - "*.jiathis.com"
-  - "*.jmstatic.com"
-  - "*.jumei.com"
-  - "*.kaola.com"
-  - "*.knewone.com"
-  - "*.koowo.com"
-  - "*.ksyungslb.com"
-  - "*.kuaidi100.com"
-  - "*.kugou.com"
-  - "*.lancdns.com"
-  - "*.landiannews.com"
-  - "*.lanzou.com"
-  - "*.lanzoui.com"
-  - "*.lanzoux.com"
-  - "*.lemicp.com"
-  - "*.letitfly.me"
-  - "*.lizhi.fm"
-  - "*.lizhi.io"
-  - "*.lizhifm.com"
-  - "*.luoo.net"
-  - "*.lvmama.com"
-  - "*.lxdns.com"
-  - "*.maoyan.com"
-  - "*.meilishuo.com"
-  - "*.meituan.com"
-  - "*.meituan.net"
-  - "*.meizu.com"
-  - "*.migucloud.com"
-  - "*.miguvideo.com"
-  - "*.mobike.com"
-  - "*.mogu.com"
-  - "*.mogucdn.com"
-  - "*.mogujie.com"
-  - "*.moji.com"
-  - "*.moke.com"
-  - "*.msstatic.com"
-  - "*.mubu.com"
-  - "*.myunlu.com"
-  - "*.nruan.com"
-  - "*.nuomi.com"
-  - "*.onedns.net"
-  - "*.oneplus.com"
-  - "*.onlinedown.net"
-  - "*.oracle.com"
-  - "*.oschina.net"
-  - "*.ourdvs.com"
-  - "*.polyv.net"
-  - "*.qbox.me"
-  - "*.qcloud.com"
-  - "*.qcloudcdn.com"
-  - "*.qdaily.com"
-  - "*.qdmm.com"
-  - "*.qhimg.com"
-  - "*.qianqian.com"
-  - "*.qidian.com"
-  - "*.qihucdn.com"
-  - "*.qin.io"
-  - "*.qiniu.com"
-  - "*.qiniucdn.com"
-  - "*.qiniudn.com"
-  - "*.qiushibaike.com"
-  - "*.quanmin.tv"
-  - "*.qunar.com"
-  - "*.qunarzz.com"
-  - "*.realme.com"
-  - "*.repaik.com"
-  - "*.ruguoapp.com"
-  - "*.runoob.com"
-  - "*.sankuai.com"
-  - "*.segmentfault.com"
-  - "*.sf-express.com"
-  - "*.shumilou.net"
-  - "*.simplecd.me"
-  - "*.smzdm.com"
-  - "*.snwx.com"
-  - "*.soufunimg.com"
-  - "*.sspai.com"
-  - "*.startssl.com"
-  - "*.suning.com"
-  - "*.synology.com"
-  - "*.taihe.com"
-  - "*.th-sjy.com"
-  - "*.tianqi.com"
-  - "*.tianqistatic.com"
-  - "*.tianyancha.com"
-  - "*.tianyaui.com"
-  - "*.tietuku.com"
-  - "*.tiexue.net"
-  - "*.tmiaoo.com"
-  - "*.trip.com"
-  - "*.ttmeiju.com"
-  - "*.tudou.com"
-  - "*.tuniu.com"
-  - "*.tuniucdn.com"
-  - "*.umengcloud.com"
-  - "*.upyun.com"
-  - "*.uxengine.net"
-  - "*.videocc.net"
-  - "*.vivo.com"
-  - "*.wandoujia.com"
-  - "*.weather.com"
-  - "*.weico.cc"
-  - "*.weidian.com"
-  - "*.weiphone.com"
-  - "*.weiphone.net"
-  - "*.womai.com"
-  - "*.wscdns.com"
-  - "*.xdrig.com"
-  - "*.xhscdn.com"
-  - "*.xiachufang.com"
-  - "*.xiaohongshu.com"
-  - "*.xiaojukeji.com"
-  - "*.xinhuanet.com"
-  - "*.xip.io"
-  - "*.xitek.com"
-  - "*.xiumi.us"
-  - "*.xslb.net"
-  - "*.xueqiu.com"
-  - "*.yach.me"
-  - "*.yeepay.com"
-  - "*.yhd.com"
-  - "*.yihaodianimg.com"
-  - "*.yinxiang.com"
-  - "*.yinyuetai.com"
-  - "*.yixia.com"
-  - "*.ys168.com"
-  - "*.yuewen.com"
-  - "*.yy.com"
-  - "*.yystatic.com"
-  - "*.zealer.com"
-  - "*.zhangzishi.cc"
-  - "*.zhanqi.tv"
-  - "*.zhaopin.com"
-  - "*.zhihu.com"
-  - "*.zhimg.com"
-  - "*.zhipin.com"
-  - "*.zhongsou.com"
-  - "*.zhuihd.com"
-  - "localhost"
-  - 127.*
-  - 10.*
-  - 172.16.*
-  - 172.17.*
-  - 172.18.*
-  - 172.19.*
-  - 172.20.*
-  - 172.21.*
-  - 172.22.*
-  - 172.23.*
-  - 172.24.*
-  - 172.25.*
-  - 172.26.*
-  - 172.27.*
-  - 172.28.*
-  - 172.29.*
-  - 172.30.*
-  - 172.31.*
-  - 192.168.*
-  - <local>
+
+
+
+# Title: AWAvenue 秋风广告规则（AWAvenue-Ads-Rule）
+# 规则版本: 1.4.0
+# 更新时间: 2024-02-29
+# 
+# 项目地址：https://github.com/TG-Twilight/AWAvenue-Ads-Rule
+# 
+# 如果需要在其它规则中混合此规则，请在您的规则显眼处注明本规则的出处，谢谢！
+# 加入Telegram群组 秋風がく山道 (@AWAvenueAdsChat) 与编写者交流，期待着您的到来！
+# 群组链接：https://t.me/AWAvenueAdsChat
+# 订阅Telegram频道 AWAvenue Ads Rule (@AWAvenueAdsRule) 获取最新公告，期待着您的订阅！
+# 频道链接：https://t.me/AWAvenueAdsRule
+# 
+# This project is licensed under the Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) license.
+# 
+# 倾城极速 - 畅游世界，高速互联！官网：https://wcnmdmht.lol/sb 官网2：https://panel.qc02.xyz
+# 
+
+#https://github.com/TG-Twilight/AWAvenue-Ads-Rule/blob/main/Filters/AWAvenue-Ads-Rule-Clash.yaml
+
+payload:
+  - '1010pic.com'
+  - '8le8le.com'
+  - 'a0.app.xiaomi.com'
+  - 'aaid.umeng.com'
+  - 'ad-scope.com'
+  - 'ad-scope.com.cn'
+  - 'ad-sdk.huxiu.com'
+  - 'ad.12306.cn'
+  - 'ad.51wnl.com'
+  - 'ad.bwton.com'
+  - 'ad.cyapi.cn'
+  - 'ad.flurry.com'
+  - 'ad.partner.gifshow.com'
+  - 'ad.qingting.fm'
+  - 'ad.qq.com'
+  - 'ad.tencentmusic.com'
+  - 'ad.toutiao.com'
+  - 'ad.winrar.com.cn'
+  - 'ad.xelements.cn'
+  - 'ad.xiaomi.com'
+  - 'ad.ximalaya.com'
+  - 'ad.zijieapi.com'
+  - 'adapi.izuiyou.com'
+  - 'adapi.yynetwk.com'
+  - 'adashbc.ut.taobao.com'
+  - 'adc.hpplay.cn'
+  - 'adcdn.hpplay.cn'
+  - 'adcdn.tencentmusic.com'
+  - 'adclick.tencentmusic.com'
+  - 'adcolony.com'
+  - 'adeng.hpplay.cn'
+  - 'adexpo.tencentmusic.com'
+  - 'adfilter.imtt.qq.com'
+  - 'adjust.cn'
+  - 'adkwai.com'
+  - 'adlog.flurry.com'
+  - 'ads-api-o.api.leiniao.com'
+  - 'ads-api.tiktok.com'
+  - 'ads-api.twitter.com'
+  - 'ads-img-qc.xhscdn.com'
+  - 'ads-video-al.xhscdn.com'
+  - 'ads-video-qc.xhscdn.com'
+  - 'ads.95516.com'
+  - 'ads.flurry.com'
+  - 'ads.google.cn'
+  - 'ads.heytapmobi.com'
+  - 'ads.huan.tv'
+  - 'ads.icloseli.cn'
+  - 'ads.music.126.net'
+  - 'ads.oppomobile.com'
+  - 'ads.service.kugou.com'
+  - 'ads.service.kugou.com'
+  - 'ads3-normal-hl.zijieapi.com'
+  - 'ads3-normal-lq.zijieapi.com'
+  - 'ads5-normal-hl.zijieapi.com'
+  - 'ads5-normal-lf.zijieapi.com'
+  - 'ads5-normal-lq.zijieapi.com'
+  - 'adsense.google.cn'
+  - 'adservice.google.cn'
+  - 'adservice.google.com'
+  - 'adservice.sigmob.cn'
+  - 'adserviceretry.kugou.com'
+  - 'adsfile.bssdlbig.kugou.com'
+  - 'adsfile.bssdlbig.kugou.com'
+  - 'adsfilebssdlbig.ali.kugou.com'
+  - 'adsfileretry.service.kugou.com'
+  - 'adsfs-sdkconfig.heytapimage.com'
+  - 'adsfs.oppomobile.com'
+  - 'adsmind.gdtimg.com'
+  - 'adsmind.ugdtimg.com'
+  - 'adsp.xunlei.com'
+  - 'adstats.tencentmusic.com'
+  - 'adtago.s3.amazonaws.com'
+  - 'adtech.yahooinc.com'
+  - 'adtrack.quark.cn'
+  - 'adukwai.com'
+  - 'adv.sec.intl.miui.com'
+  - 'adv.sec.miui.com'
+  - 'advertiseonbing.azureedge.net'
+  - 'advertising-api-eu.amazon.com'
+  - 'advertising.apple.com'
+  - 'advertising.yahoo.com'
+  - 'advertising.yandex.ru'
+  - 'advice-ads.s3.amazonaws.com'
+  - 'adview.cn'
+  - 'adx-cn.anythinktech.com'
+  - 'adx-drcn.op.dbankcloud.cn'
+  - 'adx.ads.heytapmobi.com'
+  - 'adx.ads.oppomobile.com'
+  - 'adxlog-adnet.vivo.com.cn'
+  - 'adxlog-adnet.vivo.com.cn.dsa.dnsv1.com.cn'
+  - 'afs.googlesyndication.com'
+  - 'ali-ad.a.yximgs.com'
+  - 'amdcopen.m.taobao.com'
+  - 'an.facebook.com'
+  - 'analysis.yozocloud.cn'
+  - 'analytics-api.samsunghealthcn.com'
+  - 'analytics.126.net'
+  - 'analytics.95516.com'
+  - 'analytics.google.com'
+  - 'analytics.pinterest.com'
+  - 'analytics.rayjump.com'
+  - 'analytics.tiktok.com'
+  - 'analytics.woozooo.com'
+  - 'analyze.lemurbrowser.com'
+  - 'api-access.pangolin-sdk-toutiao.com'
+  - 'api-access.pangolin-sdk-toutiao.com3'
+  - 'api-access.pangolin-sdk-toutiao1.com'
+  - 'api-access.pangolin-sdk-toutiao2.com'
+  - 'api-access.pangolin-sdk-toutiao3.com'
+  - 'api-access.pangolin-sdk-toutiao4.com'
+  - 'api-access.pangolin-sdk-toutiao5.com'
+  - 'api-ad-product.huxiu.com'
+  - 'api-adservices.apple.com'
+  - 'api-htp.beizi.biz'
+  - 'api.ad.xiaomi.com'
+  - 'api.htp.hubcloud.com.cn'
+  - 'api.hzsanjiaomao.com'
+  - 'api.installer.xiaomi.com'
+  - 'api.kingdata.ksyun.com'
+  - 'api.statsig.com'
+  - 'api5-normal-quic-lf.ixigua.com'
+  - 'apiyd.my91app.com'
+  - 'apks.webxiaobai.top'
+  - 'app-measurement.com'
+  - 'applog.lc.quark.cn'
+  - 'applog.uc.cn'
+  - 'applog.zijieapi.com'
+  - 'ata-sdk-uuid-report.dreport.meituan.net'
+  - 'audid-api.taobao.com'
+  - 'audid.umeng.com'
+  - 'azr.footprintdns.com'
+  - 'b1-data.ads.heytapmobi.com'
+  - 'bdapi-ads.realmemobile.com'
+  - 'bdapi-in-ads.realmemobile.com'
+  - 'bdapi.ads.oppomobile.com'
+  - 'beacon-api.aliyuncs.com'
+  - 'beacon.qq.com'
+  - 'beacons.gvt2.com'
+  - 'beizi.biz'
+  - 'bingads.microsoft.com'
+  - 'books-analytics-events.apple.com'
+  - 'bugly.qq.com'
+  - 'business-api.tiktok.com'
+  - 'c.evidon.com'
+  - 'c.gj.qq.com'
+  - 'c.kuaiduizuoye.com'
+  - 'c.sayhi.360.cn'
+  - 'c2.gdt.qq.com'
+  - 'catalog.fjwhcbsh.com'
+  - 'ccs.umeng.com'
+  - 'cdn-ads.oss-cn-shanghai.aliyuncs.com'
+  - 'cdn.ad.xiaomi.com'
+  - 'cdn.ynuf.aliapp.org'
+  - 'cfg.imtt.qq.com'
+  - 'chat1.jd.com'
+  - 'chc.ads.huan.tv'
+  - 'ck.ads.oppomobile.com'
+  - 'clog.miguvideo.com'
+  - 'cm.bilibili.com'
+  - 'cn-acs.m.cainiao.com'
+  - 'cnzz.com'
+  - 'collect.kugou.com'
+  - 'crashlytics.com'
+  - 'crashlyticsreports-pa.googleapis.com'
+  - 'csjplatform.com'
+  - 'data.ads.oppomobile.com'
+  - 'data.mistat.india.xiaomi.com'
+  - 'data.mistat.rus.xiaomi.com'
+  - 'data.mistat.xiaomi.com'
+  - 'dataflow.biliapi.com'
+  - 'dc.sigmob.cn'
+  - 'diagnosis.ad.xiaomi.com'
+  - 'dig.bdurl.net'
+  - 'dl.zuimeitianqi.com'
+  - 'dlogs.bwton.com'
+  - 'dm.toutiao.com'
+  - 'doubleclick-cn.net'
+  - 'doubleclick.net'
+  - 'download.changhong.upgrade2.huan.tv'
+  - 'downloadxml.changhong.upgrade2.huan.tv'
+  - 'drcn-weather.cloud.huawei.com'
+  - 'dsp.fcbox.com'
+  - 'dualstack-logs.amap.com'
+  - 'dutils.com'
+  - 'dxp.baidu.com'
+  - 'e.ad.xiaomi.com'
+  - 'eclick.baidu.com'
+  - 'ef-dongfeng.tanx.com'
+  - 'entry.baidu.com'
+  - 'errlog.umeng.com'
+  - 'errnewlog.umeng.com'
+  - 'event.tradplusad.com'
+  - 'events-drcn.op.dbankcloud.cn'
+  - 'firebaselogging-pa.googleapis.com'
+  - 'flurry.com'
+  - 'g-staic.ganjingworld.com'
+  - 'g-staic.ganjingworld.com'
+  - 'g2.ganjing.world'
+  - 'game.loveota.com'
+  - 'gdfp.gifshow.com'
+  - 'gemini.yahoo.com'
+  - 'globalapi.ad.xiaomi.com'
+  - 'google-analytics.com'
+  - 'googleadservices-cn.com'
+  - 'googleadservices.com'
+  - 'googletagservices-cn.com'
+  - 'googletagservices.com'
+  - 'gromore.pangolin-sdk-toutiao.com'
+  - 'grs.dbankcloud.com'
+  - 'grs.hicloud.com'
+  - 'h-adashx.ut.taobao.com'
+  - 'h.trace.qq.com'
+  - 'henzanapp.com'
+  - 'hexagon-analytics.com'
+  - 'hiboard-drcn.ai.dbankcloud.cn'
+  - 'hm.baidu.com'
+  - 'hmma.baidu.com'
+  - 'httpdns.bcelive.com'
+  - 'httpdns.huaweicloud.com'
+  - 'httpdns.ocloud.oppomobile.com'
+  - 'httpdns.push.oppomobile.com'
+  - 'hugelog.fcbox.com'
+  - 'hw-ot-ad.a.yximgs.com'
+  - 'hw.zuimeitianqi.com'
+  - 'hwpub-s01-drcn.cloud.dbankcloud.cn'
+  - 'hya.comp.360os.com'
+  - 'hye.comp.360os.com'
+  - 'hyt.comp.360os.com'
+  - 'i.snssdk.com'
+  - 'iad.apple.com'
+  - 'iadctest.qwapi.com'
+  - 'iadsdk.apple.com'
+  - 'iadworkbench.apple.com'
+  - 'ib.snssdk.com'
+  - 'ifs.tanx.com'
+  - 'image-ad.sm.cn'
+  - 'imageplus.baidu.com'
+  - 'images.pinduoduo.com'
+  - 'img-c.heytapimage.com'
+  - 'img.adnyg.com'
+  - 'img.adnyg.com.w.kunlungr.com'
+  - 'imtmp.net'
+  - 'irc.qubiankeji.com'
+  - 'is.snssdk.com'
+  - 'ixav-cse.avlyun.com'
+  - 'iyfbodn.com'
+  - 'janapi.jd.com'
+  - 'jfapi.chiq-cloud.com'
+  - 'jiguang.cn'
+  - 'jpush.cn'
+  - 'jpush.html5.qq.com'
+  - 'jpush.io'
+  - 'jswebcollects.kugou.com'
+  - 'kl.67it.com'
+  - 'ks.pull.yximgs.com'
+  - 'lf1-cdn-tos.bytegoofy.com'
+  - 'lf3-ad-union-sdk.pglstatp-toutiao.com'
+  - 'liveats-vod.video.ptqy.gitv.tv'
+  - 'lm10111.jtrincc.cn'
+  - 'log-api-mn.huxiu.com'
+  - 'log-api.huxiu.com'
+  - 'log-api.pangolin-sdk-toutiao-b.com'
+  - 'log-api.pangolin-sdk-toutiao.com'
+  - 'log-report.com'
+  - 'log-sdk.gifshow.com'
+  - 'log-upload-os.hoyoverse.com'
+  - 'log-upload.mihoyo.com'
+  - 'log.ad.xiaomi.com'
+  - 'log.aispeech.com'
+  - 'log.avlyun.com'
+  - 'log.avlyun.sec.intl.miui.com'
+  - 'log.byteoversea.com'
+  - 'log.fc.yahoo.com'
+  - 'log.kuwo.cn'
+  - 'log.snssdk.com'
+  - 'log.stat.kugou.com'
+  - 'log.stat.kugou.com'
+  - 'log.tagtic.cn'
+  - 'log.tbs.qq.com'
+  - 'log.vcgame.cn'
+  - 'log.web.kugou.com'
+  - 'log.web.kugou.com'
+  - 'log.zijieapi.com'
+  - 'log1.cmpassport.com'
+  - 'logbak.hicloud.com'
+  - 'logs.amap.com'
+  - 'logservice.hicloud.com'
+  - 'logservice1.hicloud.com'
+  - 'logtj.kugou.com'
+  - 'logupdate.avlyun.sec.miui.com'
+  - 'm.kubiqq.com'
+  - 'm1.ad.10010.com'
+  - 'masdkv6.3g.qq.com'
+  - 'mazu.m.qq.com'
+  - 'mdp-usertrace-cn.heytapmobi.com'
+  - 'metok.sys.miui.com'
+  - 'metrics.apple.com'
+  - 'metrics.data.hicloud.com'
+  - 'metrics.icloud.com'
+  - 'metrics.mzstatic.com'
+  - 'metrics2.data.hicloud.com'
+  - 'mi.gdt.qq.com'
+  - 'miav-cse.avlyun.com'
+  - 'mine.baidu.com'
+  - 'miui-fxcse.avlyun.com'
+  - 'mnqlog.ldmnq.com'
+  - 'mobads-logs.baidu.com'
+  - 'mobads-pre-config.cdn.bcebos.com'
+  - 'mobads.baidu.com'
+  - 'mobilelog.upqzfile.com'
+  - 'mobileservice.cn'
+  - 'mon.zijieapi.com'
+  - 'monitor.music.qq.com'
+  - 'monitor.uu.qq.com'
+  - 'monsetting.toutiao.com'
+  - 'mssdk.volces.com'
+  - 'mssdk.zijieapi.com'
+  - 'mtj.baidu.com'
+  - 'nmetrics.samsung.com'
+  - 'notes-analytics-events.apple.com'
+  - 'nsclick.baidu.com'
+  - 'o2o.api.xiaomi.com'
+  - 'oauth-login-drcn.platform.dbankcloud.com'
+  - 'offerwall.yandex.net'
+  - 'open.e.kuaishou.cn'
+  - 'open.e.kuaishou.com'
+  - 'open.kuaishouzt.com'
+  - 'open.kwaishouzt.com'
+  - 'open.kwaizt.com'
+  - 'optimus-ads.amap.com'
+  - 'oth.eve.mdt.qq.com'
+  - 'oth.str.mdt.qq.com'
+  - 'p.l.qq.com'
+  - 'p.s.360.cn'
+  - 'p1-be-pack-sign.pglstatp-toutiao.com'
+  - 'p1-lm.adkwai.com'
+  - 'p2-be-pack-sign.pglstatp-toutiao.com'
+  - 'p2-lm.adkwai.com'
+  - 'p3-be-pack-sign.pglstatp-toutiao.com'
+  - 'p3-lm.adkwai.com'
+  - 'p3-tt.byteimg.com'
+  - 'p4-be-pack-sign.pglstatp-toutiao.com'
+  - 'p5-be-pack-sign.pglstatp-toutiao.com'
+  - 'p6-be-pack-sign.pglstatp-toutiao.com'
+  - 'pagead2.googleadservices.com'
+  - 'pagead2.googlesyndication.com'
+  - 'pangolin-sdk-toutiao-b.com'
+  - 'pgdt.ugdtimg.com'
+  - 'pglstatp-toutiao.com'
+  - 'pig.pupuapi.com'
+  - 'pixon.ads-pixiv.net'
+  - 'policy.video.ptqy.gitv.tv'
+  - 'proxy.advp.apple.com'
+  - 'public.gdtimg.com'
+  - 'q.i.gdt.qq.com'
+  - 'qqdata.ab.qq.com'
+  - 'qwapi.apple.com'
+  - 'qzs.gdtimg.com'
+  - 'recommend-drcn.hms.dbankcloud.cn'
+  - 'res.hubcloud.com.cn'
+  - 'res1.hubcloud.com.cn'
+  - 'res2.hubcloud.com.cn'
+  - 'res3.hubcloud.com.cn'
+  - 'review.gdtimg.com'
+  - 'rms-drcn.platform.dbankcloud.cn'
+  - 'roi.soulapp.cn'
+  - 'rpt.gdt.qq.com'
+  - 'rtb.voiceads.cn'
+  - 's1.qq.com'
+  - 's2.qq.com'
+  - 's3.qq.com'
+  - 'samsung-com.112.2o7.net'
+  - 'samsungads.com'
+  - 'sanme2.taisantech.com'
+  - 'saveu5-normal-lq.zijieapi.com'
+  - 'scdown.qq.com'
+  - 'sdk-cache.video.ptqy.gitv.tv'
+  - 'sdk.beizi.biz'
+  - 'sdk.e.qq.com'
+  - 'sdkconf.avlyun.com'
+  - 'sdkconfig.ad.intl.xiaomi.com'
+  - 'sdkconfig.ad.xiaomi.com'
+  - 'sdkconfig.video.qq.com'
+  - 'sdkoptedge.chinanetcenter.com'
+  - 'sdktmp.hubcloud.com.cn'
+  - 'sdownload.stargame.com'
+  - 'search.ixigua.com'
+  - 'search3-search.ixigua.com'
+  - 'search5-search-hl.ixigua.com'
+  - 'search5-search.ixigua.com'
+  - 'securemetrics.apple.com'
+  - 'sensors-log.dongqiudi.com'
+  - 'service.changhong.upgrade2.huan.tv'
+  - 'service.vmos.cn'
+  - 'sf16-static.i18n-pglstatp.com'
+  - 'shouji.sogou.com'
+  - 'skdisplay.jd.com'
+  - 'slb-p2p.vcloud.ks-live.com'
+  - 'smartad.10010.com'
+  - 'smetrics.samsung.com'
+  - 'sms.ads.oppomobile.com'
+  - 'sngmta.qq.com'
+  - 'stat.y.qq.com'
+  - 'static.ads-twitter.com'
+  - 'statics.woozooo.com'
+  - 'staticsns.cdn.bcebos.com'
+  - 'stats.qiumibao.com'
+  - 'statsigapi.net'
+  - 'stg-data.ads.heytapmobi.com'
+  - 'storage.moegirl.org.cn'
+  - 'success.ctobsnssdk.com'
+  - 'syh-imp.cdnjtzy.com'
+  - 't-dsp.pinduoduo.com'
+  - 't.l.qq.com'
+  - 't.track.ad.xiaomi.com'
+  - 't1.a.market.xiaomi.com'
+  - 't2.a.market.xiaomi.com'
+  - 't3.a.market.xiaomi.com'
+  - 'tangram.e.qq.com'
+  - 'tdc.qq.com'
+  - 'tdid.m.qq.com'
+  - 'terms-drcn.platform.dbankcloud.cn'
+  - 'test.ad.xiaomi.com'
+  - 'test.e.ad.xiaomi.com'
+  - 'tj.b.qq.com'
+  - 'tj.video.qq.com'
+  - 'tmead.y.qq.com'
+  - 'tmfmazu-wangka.m.qq.com'
+  - 'tmfmazu.m.qq.com'
+  - 'tmfsdk.m.qq.com'
+  - 'tmfsdktcpv4.m.qq.com'
+  - 'tnc3-aliec1.toutiaoapi.com'
+  - 'tnc3-aliec2.bytedance.com'
+  - 'tnc3-aliec2.toutiaoapi.com'
+  - 'tnc3-alisc1.bytedance.com'
+  - 'tnc3-bjlgy.bytedance.com'
+  - 'tnc3-bjlgy.toutiaoapi.com'
+  - 'toblog.ctobsnssdk.com'
+  - 'trace.qq.com'
+  - 'track.lc.quark.cn'
+  - 'track.uc.cn'
+  - 'tracker.ai.xiaomi.com'
+  - 'tracker.gitee.com'
+  - 'tracking.miui.com'
+  - 'tracking.rus.miui.com'
+  - 'tvuser-ch.cedock.com'
+  - 'tx-ad.a.yximgs.com'
+  - 'tx-kmpaudio.pull.yximgs.com'
+  - 'tz.sec.xiaomi.com'
+  - 'uapi.ads.heytapmobi.com'
+  - 'uapi.chiq-cloud.com'
+  - 'ucstat.baidu.com'
+  - 'ulog-sdk.gifshow.com'
+  - 'ulogjs.gifshow.com'
+  - 'ulogs.umeng.com'
+  - 'ulogs.umengcloud.com'
+  - 'umengacs.m.taobao.com'
+  - 'umengjmacs.m.taobao.com'
+  - 'umsns.com'
+  - 'union.baidu.com'
+  - 'update.avlyun.sec.miui.com'
+  - 'us.l.qq.com'
+  - 'v.adintl.cn'
+  - 'v.adx.hubcloud.com.cn'
+  - 'v1-ad.video.yximgs.com'
+  - 'v2-ad.video.yximgs.com'
+  - 'v2.gdt.qq.com'
+  - 'v3-ad.video.yximgs.com'
+  - 'video-dsp.pddpic.com'
+  - 'vlive.qqvideo.tc.qq.com'
+  - 'vungle.com'
+  - 'w.l.qq.com'
+  - 'w1.askwai.com'
+  - 'w1.bskwai.com'
+  - 'w1.cskwai.com'
+  - 'w1.dskwai.com'
+  - 'w1.eskwai.com'
+  - 'w1.fskwai.com'
+  - 'w1.gskwai.com'
+  - 'w1.hskwai.com'
+  - 'w1.iskwai.com'
+  - 'w1.jskwai.com'
+  - 'w1.kskwai.com'
+  - 'w1.lskwai.com'
+  - 'w1.mskwai.com'
+  - 'w1.nskwai.com'
+  - 'w1.oskwai.com'
+  - 'w1.pskwai.com'
+  - 'w1.qskwai.com'
+  - 'w1.rskwai.com'
+  - 'w1.sskwai.com'
+  - 'w1.tskwai.com'
+  - 'w1.uskwai.com'
+  - 'w1.vskwai.com'
+  - 'w1.wskwai.com'
+  - 'w1.xskwai.com'
+  - 'w1.yskwai.com'
+  - 'w1.zskwai.com'
+  - 'weather-analytics-events.apple.com'
+  - 'weather-community-drcn.weather.dbankcloud.cn'
+  - 'weather-drcn.music.dbankcloud.cn'
+  - 'webstat.qiumibao.com'
+  - 'win.gdt.qq.com'
+  - 'wn.x.jd.com'
+  - 'ws-keyboard.shouji.sogou.com'
+  - 'ws.sj.qq.com'
+  - 'www42.zskwai.com'
+  - 'wxa.wxs.qq.com'
+  - 'wxsnsdy.wxs.qq.com'
+  - 'wxsnsdythumb.wxs.qq.com'
+  - 'xc.gdt.qq.com'
+  - 'xlivrdr.com'
+  - 'xlmzc.cnjp-exp.com'
+  - 'xlog.jd.com'
+  - 'xlviiirdr.com'
+  - 'xlviirdr.com'
+  - 'youxi.kugou.com'
+  - 'zeus.ad.xiaomi.com'
+  - '*-ad-*.byteimg.com'
+  - '*-ad-sign.byteimg.com'
+  - '*-ad.sm.cn'
+  - '*-ad.video.yximgs.com'
+  - '*-ad.video.yximgs.com'
+  - '*-ad.wtzw.com'
+  - '*-be-pack-sign.pglstatp-toutiao.com'
+  - '*-be-pack-sign.pglstatp-toutiao.com'
+  - '*-lm.adkwai.com'
+  - '*-normal-lq.zijieapi.com'
+  - '*.*.shouji.sogou.com'
+  - '*.*skwai.com'
+  - '*.*skwai.com'
+  - '*.a.market.xiaomi.com'
+  - '*.data.hicloud.com'
+  - '*.log.aliyuncs.com'
+  - '*.shouji.sogou.com'
+  - '*.zskwai.com'
+  - 'ads*-normal-*.zijieapi.com'
+  - 'cloud-inject-global.oss-cn-hongkong.aliyuncs.com'
+  - 'cloudinject*-dev.*.*-*-*.amazonaws.com'
+  - 'cloudinject*-dev.s3.ap-northoreast-1.amazonaws.com'
